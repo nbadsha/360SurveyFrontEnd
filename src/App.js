@@ -5,6 +5,7 @@ import { Footer } from './AppComponents/FooterComponent/Footer';
 import { MainContent } from './AppComponents/MainComponent/MainContent';
 
 function App() {
+  
   return (
     <>
     <Header/>
