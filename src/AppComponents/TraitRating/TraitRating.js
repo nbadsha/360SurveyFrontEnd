@@ -45,31 +45,27 @@ import './TraitRatingStyle.css'
 
 class TraitRating extends Component {
 
-  constructor() {
+  constructor(props) {
     super();
-
     this.state = {};
     this.traitNameStyle={
       'textAlign': 'justify',
       'textJustify': 'inter-word'
     }
-    this.onRadioChange = this.onRadioChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+    this.traitNameLabel = props.traitData.Traits
+    this.traitName = this.traitNameLabel.replace(/ /g,'')
+    this.props = props
+  }
+  
 
+  collectRating = (rating,traitName)=>{
+    const ratingData = {
+      traitName:traitName,
+      traitRating:rating
+    }    
+    this.props.addRatingsData(ratingData)    
   }
 
-  onRadioChange = (e) => {
-    this.setState({
-      traitName: e.target.name,
-      rating: e.target.value
-    });
-    console.log(this.state)
-  }
-
-  onSubmit = (e) => {
-    e.preventDefault();
-    console.log(this.state);
-  }
       
   render() {
     return (
@@ -78,7 +74,7 @@ class TraitRating extends Component {
           <div className="card-body ">
             <h5 className="card-title">
               {" "}
-              <strong>{this.props.traitData.Traits}</strong>
+              <strong>{this.traitNameLabel}</strong>
               {" "}
             </h5>
             <p
@@ -91,77 +87,76 @@ class TraitRating extends Component {
               <div className="rating">
                 <input
                   type="radio"
-                  name={this.props.traitData.Traits + "-rating"}
-                  id={this.props.traitData.Traits + "rate10"}
+                  name={this.traitName + "-rating"}
+                  id={this.traitName + "rate10"}
                   
                 />
-                <label htmlFor={this.props.traitData.Traits + "rate10"}>
+                <label htmlFor={this.traitName + "rate10"} onClick={ ()=>{this.collectRating(10,this.traitNameLabel)} }>
                   10
                 </label>
                 <input
                   type="radio"
-                  name={this.props.traitData.Traits + "-rating"}
-                  id={this.props.traitData.Traits + "rate9"}
+                  name={this.traitName + "-rating"}
+                  id={this.traitName + "rate9"}
                   
                 />
-                <label htmlFor={this.props.traitData.Traits + "rate9"}>9</label>
+                <label htmlFor={this.traitName + "rate9"} onClick={ ()=>{this.collectRating(9,this.traitNameLabel)} }>9</label>
                 <input
                   type="radio"
-                  name={this.props.traitData.Traits + "-rating"}
-                  id={this.props.traitData.Traits + "rate8"}
+                  name={this.traitName + "-rating"}
+                  id={this.traitName + "rate8"}
                   
                 />
-                <label htmlFor={this.props.traitData.Traits + "rate8"}>8</label>
+                <label htmlFor={this.traitName + "rate8"} onClick={ ()=>{this.collectRating(8,this.traitNameLabel)} }>8</label>
                 <input
                   type="radio"
-                  name={this.props.traitData.Traits + "-rating"}
-                  id={this.props.traitData.Traits + "rate7"}
+                  name={this.traitName + "-rating"}
+                  id={this.traitName + "rate7"}
                   
                 />
-                <label htmlFor={this.props.traitData.Traits + "rate7"}>7</label>
+                <label htmlFor={this.traitName + "rate7"} onClick={ ()=>{this.collectRating(7,this.traitNameLabel)} }>7</label>
                 <input
                   type="radio"
-                  name={this.props.traitData.Traits + "-rating"}
-                  id={this.props.traitData.Traits + "rate6"}
+                  name={this.traitName + "-rating"}
+                  id={this.traitName + "rate6"}
                   
                 />
-                <label htmlFor={this.props.traitData.Traits + "rate6"}>6</label>
+                <label htmlFor={this.traitName + "rate6"} onClick={ ()=>{this.collectRating(6,this.traitNameLabel)} }>6</label>
                 <input
                   type="radio"
-                  name={this.props.traitData.Traits + "-rating"}
-                  id={this.props.traitData.Traits + "rate5"}
+                  name={this.traitName + "-rating"}
+                  id={this.traitName + "rate5"}
                   
                 />
-                <label htmlFor={this.props.traitData.Traits + "rate5"}>5</label>
+                <label htmlFor={this.traitName + "rate5"} onClick={ ()=>{this.collectRating(5,this.traitNameLabel)} }>5</label>
                 <input
                   type="radio"
-                  name={this.props.traitData.Traits + "-rating"}
-                  id={this.props.traitData.Traits + "rate4"}
-                  
+                  name={this.traitName + "-rating"}
+                  id={this.traitName + "rate4"}                  
                   
                 />
-                <label htmlFor={this.props.traitData.Traits + "rate4"}>4</label>
+                <label htmlFor={this.traitName + "rate4"} onClick={ ()=>{this.collectRating(4,this.traitNameLabel)} }>4</label>
                 <input
                   type="radio"
-                  name={this.props.traitData.Traits + "-rating"}
-                  id={this.props.traitData.Traits + "rate3"}                  
+                  name={this.traitName + "-rating"}
+                  id={this.traitName + "rate3"}                  
                   
                 />
-                <label htmlFor={this.props.traitData.Traits + "rate3"}>3</label>
+                <label htmlFor={this.traitName + "rate3"} onClick={ ()=>{this.collectRating(3,this.traitNameLabel)} }>3</label>
                 <input
                   type="radio"
-                  name={this.props.traitData.Traits + "-rating"}
-                  id={this.props.traitData.Traits + "rate2"}
+                  name={this.traitName + "-rating"}
+                  id={this.traitName + "rate2"}
                   
                 />
-                <label htmlFor={this.props.traitData.Traits + "rate2"}>2</label>
+                <label htmlFor={this.traitName + "rate2"} onClick={ ()=>{this.collectRating(2,this.traitNameLabel)} }>2</label>
                 <input
                   type="radio"
-                  name={this.props.traitData.Traits + "-rating"}
-                  id={this.props.traitData.Traits + "rate1"}
+                  name={this.traitName + "-rating"}
+                  id={this.traitName + "rate1"}
                   
                 />
-                <label htmlFor={this.props.traitData.Traits + "rate1"}>1</label>
+                <label htmlFor={this.traitName + "rate1"} onClick={ ()=>{this.collectRating(1,this.traitNameLabel)} }>1</label>
               </div>
             </div>
           </div>

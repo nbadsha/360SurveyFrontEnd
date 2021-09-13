@@ -1,18 +1,49 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
+import React from 'react'
 import './App.css';
 import { Header } from './AppComponents/HeaderComponent/Header';
 import { Footer } from './AppComponents/FooterComponent/Footer';
-import { MainContent } from './AppComponents/MainComponent/MainContent';
+import { SurveyComponent } from './AppComponents/SurveyComponents/SurveyComponent';
+
+import { MainLanding } from './AppComponents/MainLanding/MainLanding';
+import UploadTraits from './AppComponents/UploadTraits/UploadTraits';
+import UploadCandidates from './AppComponents/UploadCandidates/UploadCandidates';
+import ManageSurvey from './AppComponents/ManageSurvey/ManageSurvey';
+
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 
 function App() {
   
+
   return (
     <>
-    <Header/>
-
-      <MainContent/>
-
-    <Footer/>
+      <Router>
+        <Header/>
+        <Switch>
+          <Route exact path='/'>
+            <MainLanding/>
+          </Route>
+          <Route exact path='/uploadTraits'>
+            <UploadTraits/>
+          </Route>  
+          <Route exact path='/uploadCandidates'>
+            <UploadCandidates/>
+          </Route>  
+          <Route exact path='/manageSurvey'>
+            <ManageSurvey/>
+          </Route>
+          <Route exact path='/collectSurvey'>
+            <SurveyComponent/>
+          </Route>
+            
+        </Switch>
+        <Footer />
+      </Router>
     </>
   );
 }

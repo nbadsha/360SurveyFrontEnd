@@ -1,25 +1,38 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import  TraitRating  from '../TraitRating/TraitRating'
 import TraitData from '../TraitRating/TraitData.json'
-import './MainContent.css'
+import './SurveyComponent.css'
 
-export const MainContent = (props) => {
+export const SurveyComponent = (props) => {
     let formStyle = {
         width:"55%",
         padding:"50px"
     }
-    // console.log(screen.width)
+    // console.log(screen.width)    
     
-    
+    const addRatingsData=(ratingData)=>{      
+      setRatingsData([...ratingsData,ratingData])
+      console.log(ratingsData)
+      // useEffect(()=>console.log(ratingsData),ratingsData)
+    }
+    const [ratingsData, setRatingsData] = useState([])
+    useEffect(() => {
+      localStorage.setItem("ratingsData", JSON.stringify(ratingsData));
+      
+    }, [ratingsData])
     return (
       <form action="POST">
+        
       <div className="container form" style={formStyle}>
+      <div className="alert alert-primary" role="alert">
+          <strong>Mr. Jhon</strong> is working as a salesman in EXL. Please Spare sometimes to rate him on this traits.
+        </div>
         <div className="mb-3">
           <label htmlFor="empName" className="form-label">
-            Name<span className="text text-danger">*</span>
+            Employee Name<span className="text text-danger">*</span>
           </label>
           <input
-            type="email"
+            type="text"
             className="form-control"
             id="empName"
             placeholder="Your name goes here..."
@@ -53,12 +66,12 @@ export const MainContent = (props) => {
         
         {
           TraitData.map((trait)=>{return(            
-            <TraitRating traitData={trait} key={trait.ID} collectTraitRating={props.collectTraitRating}/>
+            <TraitRating traitData={trait} key={trait.ID} collectTraitRating={props.collectTraitRating} addRatingsData={addRatingsData}/>
           )})
         }
         
 
-        <button className="btn btn-primary m-3">Next</button>
+        <button type="submit" className="btn btn-primary m-3">Submit</button>
         
       </div>
       </form>
