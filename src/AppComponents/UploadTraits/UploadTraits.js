@@ -1,20 +1,27 @@
 import React, { Component } from 'react'
 import * as XLSX from 'xlsx';
+import api from '../../APIs/360SurveyApi'
 
 export default class UploadTraits extends Component {
     constructor(props){
       super(props)
       this.selectedFile = null
       this.traitsData = null
-      this.traitTable = null
+      
       this.readFile = this.readFile.bind(this)
+      this.uploadTraits = this.uploadTraits.bind(this)
+      
       
       this.state = {
         tableContent: [],
         uploadBtnClick:0
     };
-
     
+    }
+
+    componentDidMount(){
+      this.getAllTraits = this.getAllTraits.bind(this)
+      this.getAllTraits()
     }
 
     readFile(evt){
@@ -40,18 +47,43 @@ export default class UploadTraits extends Component {
       };
       reader.readAsBinaryString(f);      
     }
+
     
+    // xf1jc2
     uploadTraits(e){ 
-      e.preventDefault()    
+      e.preventDefault() 
+      
+      const postTraits = 
+        api.post('createTraits',{
+          headers: { 
+            'Content-Type': 'application/json'
+          },
+          data : this.traitsData
+        })
+      
+      
       if (this.selectedFile===null){
         alert('Please select file')        
       }
-      else{        
-        this.setState({
-          tableContent: this.traitsData 
-        });
+      else{    
+        postTraits.then((res)=>{
+        // console.log(res) 
+        this.getAllTraits()       
+        })
+        
       }
 
+    }
+    // this.setState({
+    //   tableContent:res.data
+    // });
+    getAllTraits(){
+      api.get('getAllTraits').then((res)=>{
+            console.log(res)
+            this.setState({
+              tableContent:res.data
+            });
+      })
     }
 
     
@@ -59,7 +91,7 @@ export default class UploadTraits extends Component {
     render() {
       
         return (
-          <div className="container">
+          <div className="container form-container">
             <div className="alert alert-primary" role="alert">
               Please upload an excel file consisting <strong>Traits</strong> and
               Its <strong>Definition</strong>. <br />
@@ -113,11 +145,11 @@ export default class UploadTraits extends Component {
                 <tr>
                 <th scope="row" colSpan="3" className="text-center" >{'No-Data'}</th>       
               </tr> :
-                this.state.tableContent.map((e)=>
-                <tr key={e.__rowNum__}>
-                <th scope="row" >{e.__rowNum__}</th>
-                <th scope="row">{e.Traits}</th>
-                <td className="justify-text">{e.Definition}</td>                  
+                this.state.tableContent.map((e,i)=>
+                <tr key={e.id}>
+                <th scope="row" >{i+1}</th>
+                <th scope="row">{e.trait_name}</th>
+                <td className="justify-text">{e.trait_definition}</td>                  
               </tr> 
                 )
               }

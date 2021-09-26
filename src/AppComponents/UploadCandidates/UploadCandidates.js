@@ -1,22 +1,25 @@
 import React, { Component } from 'react'
 import * as XLSX from 'xlsx';
+import api from '../../APIs/360SurveyApi'
+
 
 export default class UploadCandidates extends Component {
     constructor(props){
         super(props)
         this.selectedFile = null
-        this.traitsData = null
-        this.traitTable = null
+        this.candsData = null        
         this.readFile = this.readFile.bind(this)
         
         this.state = {
           tableContent: [],
           uploadBtnClick:0
-      };
-  
-      
+      };  
       }
-  
+
+      componentDidMount(){
+        this.getAllCandidates = this.getAllCandidates.bind(this)
+        this.getAllCandidates()
+      }
       readFile(evt){
         this.selectedFile = evt.target.files[0]['name']
         
@@ -33,33 +36,48 @@ export default class UploadCandidates extends Component {
             /* Convert array of arrays */
             const data = XLSX.utils.sheet_to_json(ws);
             /* Update state */
-            if (this.traitsData ===null) {
-              this.traitsData=data
+            if (this.candsData ===null) {
+              this.candsData=data
               
             }
         };
         reader.readAsBinaryString(f);      
       }
       
-      uploadTraits(e){ 
+      uploadCandidates(e){ 
         e.preventDefault()    
         if (this.selectedFile===null){
           alert('Please select file')        
         }
-        else{        
+        else{
+          api.post('createCandidates',{
+            headers: { 
+              'Content-Type': 'application/json'
+            },
+            data : this.candsData
+          }).then((res)=>{
+            console.log(res)
+          })
           this.setState({
-            tableContent: this.traitsData 
+            tableContent: this.candsData 
           });
-        }
-  
+          console.log(this.candsData)
+        }  
       }
-  
+      getAllCandidates(){
+        api.get('getAllCandidates').then((res)=>{
+          console.log(res.data)
+          this.setState({
+            tableContent: res.data
+          });
+        })
+      }
       
   
       render() {
         
           return (
-            <div className="container">
+            <div className="container form-container">
               <div className="alert alert-primary" role="alert">
                 Please upload an excel file consisting <strong>Candidates</strong>, for whom you want to perform a 360° Survey.
                 Data Configuaration should be as follows:
@@ -87,7 +105,7 @@ export default class UploadCandidates extends Component {
                   className="input-group-text btn btn-primary"
                   htmlFor="inputGroupFile02"
                   onClick={(e)=>{
-                    this.uploadTraits(e)
+                    this.uploadCandidates(e)
                   }}
                 >
                   Upload
@@ -117,11 +135,12 @@ export default class UploadCandidates extends Component {
                   <tr>
                   <th scope="row" colSpan="4" className="text-center" >{'No-Data'}</th>       
                 </tr> :
-                  this.state.tableContent.map((e)=>
-                  <tr key={e.__rowNum__}>
-                  <th scope="row" >{e.__rowNum__}</th>
-                  <th scope="row">{e.Traits}</th>
-                  <td className="justify-text">{e.Definition}</td>                  
+                  this.state.tableContent.map((e,i)=>
+                  <tr key={i+1}>
+                  <th scope="row" >{i+1}</th>
+                  <td>{e.cand_name}</td>
+                  <td>{e.job_role}</td>
+                  <td className='text-center'>{e.company_name}</td>
                 </tr> 
                   )
                 }
