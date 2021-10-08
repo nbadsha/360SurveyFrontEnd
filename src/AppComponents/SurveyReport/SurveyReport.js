@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { AgGridColumn, AgGridReact } from 'ag-grid-react'
+import { AgGridReact } from 'ag-grid-react'
 import api from '../../APIs/360SurveyApi'
 import './SurveyReport.css'
 
@@ -16,7 +16,6 @@ export default class SurveyReport extends Component {
         this.onGridReady = this.onGridReady.bind(this)  
         this.exportToCSV = this.exportToCSV.bind(this)  
         this.state = {
-
             tblType:0,
             tableCols:[],
             tableData:[],
@@ -31,7 +30,7 @@ export default class SurveyReport extends Component {
     }
 
     getAvgRatings(){
-        const tableCols = ['cand_name']
+        const tableCols = ['srno','cand_name']
         api.get('getAvgRatings').then((res)=>{
             console.log('getAvgRatings',res.data)
             // console.log(res.data[0])
@@ -44,6 +43,7 @@ export default class SurveyReport extends Component {
                    
             traitNames[0].map((trait)=>{                
                 modTraitNames.push(trait.trait_name)
+                return 0
             })
             
             const newTableCols = tableCols.concat(modTraitNames)
@@ -51,10 +51,18 @@ export default class SurveyReport extends Component {
             const tableHeader = []
 
             newTableCols.map((col)=>{
-                let fieldData={
-                    headerName: camelcase(col,{pascalCase: true}), field: col, width: 150 
+                let fieldData
+                if (col==='srno') {
+                    fieldData={
+                        headerName: '#', field: col, width: 70 
+                    }
+                }else{
+                    fieldData={
+                        headerName: camelcase(col,{pascalCase: true}), field: col, width: 250 
+                    }
                 }
                 tableHeader.push(fieldData)
+                return 0
             })
 
             this.setState({tableCols:tableHeader,tableData:surveyData,tblType:2})
@@ -62,7 +70,7 @@ export default class SurveyReport extends Component {
     }
 
     getTotalSurveyReport(){
-        const tableCols = ['candidate','respondent','relation']        
+        const tableCols = ['srno','candidate','respondent','relation']        
         api.get('getSurveyReport').then((res)=>{
             // console.log('getTotalSurveyReport',res.data)
             // this.setState({totalSurveyData:res.data})
@@ -74,6 +82,7 @@ export default class SurveyReport extends Component {
                    
             traitNames[0].map((trait)=>{                
                 modTraitNames.push(trait.trait_name)
+                return 0
             })
             
             const newTableCols = tableCols.concat(modTraitNames)
@@ -81,10 +90,18 @@ export default class SurveyReport extends Component {
             const tableHeader = []
 
             newTableCols.map((col)=>{
-                let fieldData={
-                    headerName: camelcase(col,{pascalCase: true}), field: col, width: 250 
+                let fieldData
+                if (col==='srno') {
+                    fieldData={
+                        headerName: '#', field: col, width: 70 
+                    }
+                }else{
+                    fieldData={
+                        headerName: camelcase(col,{pascalCase: true}), field: col, width: 250 
+                    }
                 }
                 tableHeader.push(fieldData)
+                return 0
             })
 
             this.setState({tableCols:tableHeader,tableData:surveyData,tblType:1})
@@ -122,8 +139,7 @@ export default class SurveyReport extends Component {
                 columnDefs = {this.state.tableCols}
                 rowData = {this.state.tableData}
                 onGridReady={this.onGridReady}
-                >
-                <AgGridColumn field='count' headerName='#'></AgGridColumn>        
+                >                       
 
 
                 </AgGridReact>

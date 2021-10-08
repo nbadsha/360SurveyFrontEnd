@@ -23,8 +23,9 @@ class TraitRating extends Component {
       traitId:traitName,
       trait_rating:rating,      
       candidateId:this.props.candidateId
-    }    
-    this.props.addRatingsData(ratingData)    
+    }
+    
+    this.props.addRatingsData(ratingData) 
   }
 
       
